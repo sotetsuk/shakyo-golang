@@ -16,13 +16,11 @@ func Crawl(url string, depth int, fetcher Fetcher) {
 	// This implementation doesn't do either:
 
 	visited := make(map[string]bool)
-	quit := make(chan int)
 	num_worker := 1
 
 	var crawl func(url string, depth int, fetcher Fetcher)
 	crawl = func(url string, depth int, fetcher Fetcher) {
 		if depth <= 0 {
-			quit <- 1
 			return
 		}
 		if visited[url] {
