@@ -1,8 +1,6 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 type Fetcher interface {
 	// Fetch returns the body of URL and
@@ -19,8 +17,9 @@ func Crawl(url string, depth int, fetcher Fetcher) {
 
 	visited := make(map[string]bool)
 	quit := make(chan int)
+	num_worker := 1
 
-	var crawl func(url string,depth int, fetcher Fetcher)
+	var crawl func(url string, depth int, fetcher Fetcher)
 	crawl = func(url string, depth int, fetcher Fetcher) {
 		if depth <= 0 {
 			quit <- 1
@@ -38,18 +37,12 @@ func Crawl(url string, depth int, fetcher Fetcher) {
 		fmt.Printf("found: %s %q\n", url, body)
 		for _, u := range urls {
 			go crawl(u, depth-1, fetcher)
+			num_worker += 1
 		}
 	}
 
-	num_worker := 1
 	go crawl(url, depth, fetcher)
 	for num_worker > 0 {
-		select {
-		case <- quit:
-			num_worker -= 1
-		default:
-			continue
-		}
 	}
 }
 
