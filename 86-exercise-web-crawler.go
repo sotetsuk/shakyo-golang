@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sync"
+)
 
 type Fetcher interface {
 	// Fetch returns the body of URL and
@@ -16,10 +19,14 @@ func Crawl(url string, depth int, fetcher Fetcher) {
 	// This implementation doesn't do either:
 
 	visited := make(map[string]bool)
-	num_worker := 1
+	var wg sync.WaitGroup
 
+	// In golang, we can't define local function.
+	// In order to define recursive function locally,
+	// we should declare function as variable and assign nameless function.
 	var crawl func(url string, depth int, fetcher Fetcher)
 	crawl = func(url string, depth int, fetcher Fetcher) {
+		defer wg.Done()
 		if depth <= 0 {
 			return
 		}
@@ -34,14 +41,15 @@ func Crawl(url string, depth int, fetcher Fetcher) {
 		}
 		fmt.Printf("found: %s %q\n", url, body)
 		for _, u := range urls {
+			wg.Add(1)
 			go crawl(u, depth-1, fetcher)
-			num_worker += 1
 		}
+
 	}
 
+	wg.Add(1)
 	go crawl(url, depth, fetcher)
-	for num_worker > 0 {
-	}
+	wg.Wait()
 }
 
 func main() {
