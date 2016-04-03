@@ -10,8 +10,8 @@ func (addr IPAddr) String() string {
 }
 
 func main() {
-	addrs := map[string]IPAddr {
-		"lookback": {127, 0, 0, 1},
+	addrs := map[string]IPAddr{
+		"lookback":  {127, 0, 0, 1},
 		"googleDNS": {8, 8, 8, 8},
 	}
 	for n, a := range addrs {

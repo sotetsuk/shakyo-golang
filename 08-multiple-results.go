@@ -7,6 +7,6 @@ func swqp(x, y string) (string, string) {
 }
 
 func main() {
-	a, b  := swqp("hello", "world")
+	a, b := swqp("hello", "world")
 	fmt.Println(a, b)
 }

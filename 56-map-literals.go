@@ -6,11 +6,11 @@ type Vertex struct {
 	Lat, Long float64
 }
 
-var m = map[string]Vertex {
-	"Bell Labs": Vertex {
+var m = map[string]Vertex{
+	"Bell Labs": {
 		40.68433, -74.39967,
 	},
-	"Google": Vertex {
+	"Google": {
 		37.42202, -122.08408,
 	},
 }

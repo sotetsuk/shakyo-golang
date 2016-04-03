@@ -29,8 +29,8 @@ func Same(t1, t2 *tree.Tree) bool {
 	go Walk(t2, ch2)
 
 	for i := 0; i < 10; i++ {
-		v1 := <- ch1;
-		v2 := <- ch2;
+		v1 := <-ch1
+		v2 := <-ch2
 		if v1 != v2 {
 			return false
 		}

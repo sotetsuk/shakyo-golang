@@ -6,7 +6,7 @@ import (
 	"image/color"
 )
 
-type Image struct{
+type Image struct {
 	Width, Height int
 }
 
@@ -19,7 +19,7 @@ func (im Image) ColorModel() color.Model {
 }
 
 func (im Image) At(x, y int) color.Color {
-	return color.RGBA{uint8(x)%255, uint8(y)%255, uint8(x * y)%255, 255}
+	return color.RGBA{uint8(x) % 255, uint8(y) % 255, uint8(x*y) % 255, 255}
 }
 
 func main() {
