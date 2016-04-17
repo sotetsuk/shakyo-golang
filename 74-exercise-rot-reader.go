@@ -10,16 +10,26 @@ type rot13Reader struct {
 	r io.Reader
 }
 
+func isAlphabet(char byte) bool {
+	return (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z')
+}
+
 func (rot *rot13Reader) Read(b []byte) (n int, err error) {
 	n, err = rot.r.Read(b)
+	if err != nil {
+		return n, err
+	}
+
 	for i, v := range b {
-		if r := v + 13; (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') {
+		if !isAlphabet(v) {
+			continue
+		} else if r := v + 13; isAlphabet(r) {
 			b[i] = r
-		} else if r := v - 13; (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') {
+		} else if r := v - 13; isAlphabet(r) {
 			b[i] = r
 		}
 	}
-	return n, err
+	return n, nil
 }
 
 func main() {
