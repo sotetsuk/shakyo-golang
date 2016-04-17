@@ -21,24 +21,20 @@ func Crawl(url string, depth int, fetcher Fetcher) {
 	visited := make(map[string]bool)
 	var wg sync.WaitGroup
 
-	// In golang, we can't define local function.
-	// In order to define recursive function locally,
-	// we should declare function as variable and assign nameless function.
 	var crawl func(url string, depth int, fetcher Fetcher)
 	crawl = func(url string, depth int, fetcher Fetcher) {
 		defer wg.Done()
-		if depth <= 0 {
+		if depth <= 0 || visited[url] {
 			return
 		}
-		if visited[url] {
-			return
-		}
+
 		visited[url] = true
 		body, urls, err := fetcher.Fetch(url)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
+
 		fmt.Printf("found: %s %q\n", url, body)
 		for _, u := range urls {
 			wg.Add(1)
